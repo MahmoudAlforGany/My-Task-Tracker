@@ -1,10 +1,10 @@
-Mahmoud AlforGany Task Tracker — Images Folder
+Mahmoud AlforGany Task Tracker — /source/ Folder
 ================================================
 
 Drop your personal photo and the company logo into this folder.
 The app will pick them up automatically when you refresh.
 
-Required filenames (DO NOT prefix with "images" — that's the folder, not the name):
+Required filenames (DO NOT prefix with "source" — that's the folder, not the name):
 
   photo.jpg / photo.jpeg / photo.png / photo.webp
       — your personal photo (right side of the header)
@@ -23,5 +23,5 @@ Tips:
   (those are saved in browser LocalStorage).
 
 Folder priority (first match wins):
-  1) images/photo.jpg     2) images/photo.png     3) LocalStorage upload     4) Placeholder
-  1) images/logo.png      2) images/logo.jpg      3) LocalStorage upload     4) Placeholder
+  1) source/photo.jpg     2) source/photo.png     3) LocalStorage upload     4) Placeholder
+  1) source/logo.png      2) source/logo.jpg      3) LocalStorage upload     4) Placeholder

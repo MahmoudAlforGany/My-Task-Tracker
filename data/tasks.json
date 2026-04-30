@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "app": "Mahmoud AlforGany Task Tracker",
+  "savedAt": "2026-04-30T15:11:15.852Z",
+  "tasks": [
+    {
+      "id": "T-GZDFI17K",
+      "title": "Update ShipMent Tracker",
+      "department": "Automation",
+      "owner": "Ana",
+      "priority": "High",
+      "status": "Pending",
+      "startDate": "2026-04-30",
+      "dueDate": "2026-05-03",
+      "notes": ""
+    },
+    {
+      "id": "T-AP16RH5A",
+      "title": "Myzone Ultron Pc & Receiver Status",
+      "department": "Forecasting",
+      "owner": "Ana & Salma",
+      "priority": "Medium",
+      "status": "Pending",
+      "startDate": "2026-04-30",
+      "dueDate": "2026-05-05",
+      "notes": "Dear Gents,\nThank you for your note.\nAs previously highlighted, Myzone orders will be handled as B2B starting from 2026.\nSince the two SKUs (Ultron PC & Receiver) are dependent, we will review the situation and propose the appropriate action, including placing a new order if required.\nWe will revert shortly with the next steps.\nNoushad & Faisal >>  Pls Advise if there is any other item from the same brand are dependent?\nBest regards,"
+    },
+    {
+      "id": "T-MXIMK887",
+      "title": "WORKSHOP WORK ORDER (With JESSIE)",
+      "department": "Automation",
+      "owner": "Ana & JESSIE",
+      "priority": "High",
+      "status": "In Progress",
+      "startDate": "2026-04-29",
+      "dueDate": "2026-05-06",
+      "notes": ""
+    },
+    {
+      "id": "T-N43SK3XF",
+      "title": "Adding WH Policy To the Main Policy & Discuss With JESSIE",
+      "department": "Automation",
+      "owner": "Ana & JESSIE",
+      "priority": "Medium",
+      "status": "Pending",
+      "startDate": "2026-04-25",
+      "dueDate": "2026-05-14",
+      "notes": ""
+    },
+    {
+      "id": "T-UCDPDVFU",
+      "title": "LF P.O Creation Exception",
+      "department": "Reporting",
+      "owner": "Ana & Shahwan",
+      "priority": "Medium",
+      "status": "Pending",
+      "startDate": "2026-04-25",
+      "dueDate": "2026-06-11",
+      "notes": ""
+    },
+    {
+      "id": "T-N2OTJPNP",
+      "title": "Automated Shipment Tracker",
+      "department": "Automation",
+      "owner": "Ana",
+      "priority": "High",
+      "status": "Completed",
+      "startDate": "2026-04-25",
+      "dueDate": "2026-04-30",
+      "notes": ""
+    },
+    {
+      "id": "T-TXVWG2V1",
+      "title": "LF Compatibility Tool",
+      "department": "Automation",
+      "owner": "Ana",
+      "priority": "Medium",
+      "status": "In Progress",
+      "startDate": "2026-04-15",
+      "dueDate": "2026-05-14",
+      "notes": ""
+    },
+    {
+      "id": "T-NKCK2FAL",
+      "title": "AGING Price-Cut Off List with Finance",
+      "department": "Reporting",
+      "owner": "Ana",
+      "priority": "Medium",
+      "status": "Pending",
+      "startDate": "2026-04-20",
+      "dueDate": "2026-05-10",
+      "notes": ""
+    },
+    {
+      "id": "T-H7GYGNJD",
+      "title": "April-2026 AGING Performance",
+      "department": "Reporting",
+      "owner": "Ana",
+      "priority": "High",
+      "status": "Pending",
+      "startDate": "2026-05-01",
+      "dueDate": "2026-05-07",
+      "notes": ""
+    },
+    {
+      "id": "T-NODL4UUP",
+      "title": "SC Policy Workflow",
+      "department": "Automation",
+      "owner": "Ana & Shahwan",
+      "priority": "Medium",
+      "status": "In Progress",
+      "startDate": "2026-04-01",
+      "dueDate": "2026-05-21",
+      "notes": ""
+    },
+    {
+      "id": "T-FALRWT87",
+      "title": "DF Jeddah Withdrawal Stock",
+      "department": "Supply Planning - Repl.",
+      "owner": "Ana & Shahwan",
+      "priority": "Medium",
+      "status": "In Progress",
+      "startDate": "2026-04-15",
+      "dueDate": "2026-05-07",
+      "notes": ""
+    },
+    {
+      "id": "T-NDZY3RM5",
+      "title": "Athletes Junction (Hyperice) Order",
+      "department": "Forecasting",
+      "owner": "Ana",
+      "priority": "Medium",
+      "status": "In Progress",
+      "startDate": "2026-04-25",
+      "dueDate": "2026-05-05",
+      "notes": ""
+    },
+    {
+      "id": "T-5CKIM1VU",
+      "title": "DF Shanghai Order",
+      "department": "Forecasting",
+      "owner": "Ana",
+      "priority": "High",
+      "status": "Completed",
+      "startDate": "2026-04-10",
+      "dueDate": "2026-04-25",
+      "notes": ""
+    },
+    {
+      "id": "T-STCRJ6W8",
+      "title": "CONCEPT 2 Order",
+      "department": "Forecasting",
+      "owner": "Ana",
+      "priority": "High",
+      "status": "Completed",
+      "startDate": "2026-04-10",
+      "dueDate": "2026-04-25",
+      "notes": ""
+    },
+    {
+      "id": "T-C2QS29TQ",
+      "title": "Life Fitness Consumer Order",
+      "department": "Forecasting",
+      "owner": "Ana",
+      "priority": "High",
+      "status": "Completed",
+      "startDate": "2026-04-01",
+      "dueDate": "2026-04-30",
+      "notes": ""
+    },
+    {
+      "id": "T-PCM7YVIB",
+      "title": "Life Fitness Prices Revision",
+      "department": "Reporting",
+      "owner": "Ana & Shahwan & Noushad",
+      "priority": "High",
+      "status": "In Progress",
+      "startDate": "2026-04-25",
+      "dueDate": "2026-05-05",
+      "notes": ""
+    }
+  ],
+  "config": {
+    "statusList": [
+      "Pending",
+      "In Progress",
+      "Completed"
+    ],
+    "priorityList": [
+      "High",
+      "Medium",
+      "Low"
+    ],
+    "departmentList": [
+      "S&OP - Demand Stage",
+      "S&OP - Procurement Stage",
+      "S&OP - Finance Stage",
+      "S&OP - Mgt. Approval Stage",
+      "Supply Planning - Repl.",
+      "Reporting",
+      "Forecasting",
+      "Automation"
+    ]
+  },
+  "tips": [
+    {
+      "cat": "Supply Chain",
+      "text": "A forecast that everybody believes is more useful than a perfect one nobody trusts. Align stakeholders, then refine."
+    },
+    {
+      "cat": "Supply Chain",
+      "text": "Inventory hides problems. Reduce it gradually and your real bottlenecks become visible."
+    },
+    {
+      "cat": "Supply Chain",
+      "text": "Lead time variability is more dangerous than long lead time. Stabilize first, then shorten."
+    },
+    {
+      "cat": "Supply Chain",
+      "text": "Service level targets without cost-to-serve analysis are wishful thinking."
+    },
+    {
+      "cat": "Planning",
+      "text": "A plan you cannot execute is a wish. Reality-check capacity, materials, and people before publishing."
+    },
+    {
+      "cat": "Planning",
+      "text": "Plan in pencil, execute in pen. Stay flexible, but commit clearly once you decide."
+    },
+    {
+      "cat": "Planning",
+      "text": "S&OP is a decision-making cadence, not a reporting ritual. If no decisions are made, the meeting is broken."
+    },
+    {
+      "cat": "Productivity",
+      "text": "Touch each task only once: do it, delegate it, defer it on a calendar, or delete it."
+    },
+    {
+      "cat": "Productivity",
+      "text": "Two minutes or less? Do it now. Otherwise, capture it in your tracker — never in your head."
+    },
+    {
+      "cat": "Productivity",
+      "text": "Block time on your calendar for deep work the same way you block time for meetings."
+    },
+    {
+      "cat": "Productivity",
+      "text": "Done is better than perfect. Ship the v1, learn, iterate."
+    },
+    {
+      "cat": "Business",
+      "text": "Speed of decision often matters more than perfection of decision. Decide, observe, adjust."
+    },
+    {
+      "cat": "Business",
+      "text": "You manage what you measure. Choose 3 KPIs that drive 80% of outcomes — and protect them."
+    },
+    {
+      "cat": "Business",
+      "text": "Cost is what you pay. Value is what you deliver. Lead with value, defend with cost."
+    },
+    {
+      "cat": "Motivation",
+      "text": "Discipline is choosing between what you want now and what you want most."
+    },
+    {
+      "cat": "Motivation",
+      "text": "Small daily improvements compound. 1% better every day = 37x better in a year."
+    },
+    {
+      "cat": "Motivation",
+      "text": "Pressure is a privilege — it means people trust you with what matters."
+    },
+    {
+      "cat": "Motivation",
+      "text": "You don't rise to the level of your goals — you fall to the level of your systems."
+    }
+  ]
+}

@@ -1403,6 +1403,68 @@
     font-size: 12px;
   }
 
+  /* ============================================================
+     SYNC INDICATOR
+     ============================================================ */
+  .sync-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: var(--tr);
+  }
+  .sync-indicator:hover { color: var(--text); border-color: var(--glass-border-strong); transform: translateY(-1px); }
+  .sync-indicator .sync-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gray);
+    box-shadow: 0 0 8px rgba(148,163,184,.5);
+  }
+  .sync-indicator[data-state="connected"] .sync-dot { background: var(--green); box-shadow: 0 0 10px var(--green); }
+  .sync-indicator[data-state="syncing"] .sync-dot { background: var(--blue); box-shadow: 0 0 10px var(--blue); animation: pulse-dot 1.2s ease-in-out infinite; }
+  .sync-indicator[data-state="error"] .sync-dot { background: var(--red); box-shadow: 0 0 10px var(--red); }
+  .sync-indicator[data-state="connected"] { color: #d1fae5; border-color: rgba(16,185,129,.35); background: rgba(16,185,129,.10); }
+  .sync-indicator[data-state="syncing"]   { color: #bfdbfe; border-color: rgba(59,130,246,.35); background: rgba(59,130,246,.10); }
+  .sync-indicator[data-state="error"]     { color: #fecaca; border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.10); }
+  .sync-indicator[data-state="pending"]   { color: #fde68a; border-color: rgba(245,158,11,.45); background: rgba(245,158,11,.12); animation: syncPulse 2s ease-in-out infinite; }
+  .sync-indicator[data-state="pending"] .sync-dot { background: var(--orange); box-shadow: 0 0 10px var(--orange); }
+  @keyframes syncPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,.4); } 50% { box-shadow: 0 0 0 6px rgba(245,158,11,0); } }
+  html[data-theme="light"] .sync-indicator[data-state="pending"] { color: #92400e; }
+  html[data-theme="light"] .sync-indicator[data-state="connected"] { color: #065f46; }
+  html[data-theme="light"] .sync-indicator[data-state="syncing"]   { color: #1e40af; }
+  html[data-theme="light"] .sync-indicator[data-state="error"]     { color: #991b1b; }
+  @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  @media (max-width: 720px) {
+    .sync-indicator .sync-label { display: none; }
+  }
+
+  /* Sync settings pane */
+  .sync-status-card {
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--glass-border);
+    margin-bottom: 14px;
+  }
+  html[data-theme="light"] .sync-status-card { background: rgba(15,23,42,.04); }
+  .sync-status-card .row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .sync-status-card .row .k { color: var(--text-mute); }
+  .sync-status-card .row .v { color: var(--text); font-weight: 600; }
+  .sync-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+
   /* generic custom badge fallback */
   .badge.custom {
     background: rgba(129,140,248,.18);
@@ -1435,16 +1497,17 @@
 
   <!-- ========== HEADER ========== -->
   <header class="header">
-    <div class="brand-logo" id="brandLogo" title="Click to upload company logo">
+    <!-- LEFT: personal photo -->
+    <div class="brand-photo" id="brandPhoto" title="Click to upload your photo">
       <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 12 L12 3 L21 12 L12 21 Z"/>
-        <path d="M8 12 L12 8 L16 12 L12 16 Z"/>
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
       </svg>
       <span class="photo-overlay">Change</span>
-      <button type="button" class="photo-remove" id="logoRemove" title="Remove logo" aria-label="Remove logo">
+      <button type="button" class="photo-remove" id="photoRemove" title="Remove photo" aria-label="Remove photo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <input type="file" id="logoInput" accept="image/*" style="display:none" />
+      <input type="file" id="photoInput" accept="image/*" style="display:none" />
     </div>
 
     <div class="brand-text">
@@ -1468,20 +1531,25 @@
       <button class="help-btn" id="helpBtn" title="Keyboard shortcuts">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </button>
+      <button class="sync-indicator" id="syncIndicator" data-state="idle" title="Sync status — click to manage">
+        <span class="sync-dot"></span>
+        <span class="sync-label">Local Only</span>
+      </button>
       <button class="auth-indicator" id="authBtn" title="Click to authenticate">
         <span class="dot"></span>
         <span id="authLabel">View Mode</span>
       </button>
-      <div class="brand-photo" id="brandPhoto" title="Click to upload your photo">
+      <!-- RIGHT: company logo -->
+      <div class="brand-logo" id="brandLogo" title="Click to upload company logo">
         <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="8" r="4"/>
-          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+          <path d="M3 12 L12 3 L21 12 L12 21 Z"/>
+          <path d="M8 12 L12 8 L16 12 L12 16 Z"/>
         </svg>
         <span class="photo-overlay">Change</span>
-        <button type="button" class="photo-remove" id="photoRemove" title="Remove photo" aria-label="Remove photo">
+        <button type="button" class="photo-remove" id="logoRemove" title="Remove logo" aria-label="Remove logo">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <input type="file" id="photoInput" accept="image/*" style="display:none" />
+        <input type="file" id="logoInput" accept="image/*" style="display:none" />
       </div>
     </div>
   </header>
@@ -1611,10 +1679,10 @@
       <div class="kpi red">
         <div class="label">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          High Priority
+          <span id="kpi-high-label">Top Priority</span>
         </div>
         <div class="value" id="kpi-high">0</div>
-        <div class="sub">Urgent attention</div>
+        <div class="sub" id="kpi-high-sub">Urgent attention</div>
       </div>
     </div>
 
@@ -1869,6 +1937,7 @@
         <button class="settings-tab" data-pane="priority">Priority</button>
         <button class="settings-tab" data-pane="department">Department</button>
         <button class="settings-tab" data-pane="tips">Tips</button>
+        <button class="settings-tab" data-pane="sync">Sync</button>
       </div>
 
       <div class="settings-pane active" data-pane="status">
@@ -1914,6 +1983,39 @@
             <button class="btn primary btn-sm" id="tipAddBtn">Add</button>
           </div>
         </div>
+      </div>
+
+      <div class="settings-pane" data-pane="sync">
+        <p class="pane-hint">
+          Connect to a shared <code>data/tasks.json</code> file so this tracker keeps the same data across browsers and devices.
+          When the file lives in a synced folder (OneDrive / Google Drive / Dropbox / Git repo), every browser that connects to it
+          stays in sync automatically. Requires Chrome, Edge, or Brave.
+        </p>
+        <div class="sync-status-card" id="syncStatusCard">
+          <div class="row"><span class="k">Status</span><span class="v" id="syncCardStatus">—</span></div>
+          <div class="row"><span class="k">Connected file</span><span class="v" id="syncCardFile">Not connected</span></div>
+          <div class="row"><span class="k">Last write</span><span class="v" id="syncCardLast">—</span></div>
+          <div class="row"><span class="k">Browser support</span><span class="v" id="syncCardSupport">—</span></div>
+        </div>
+        <div class="sync-actions">
+          <button class="btn primary btn-sm" id="syncConnectBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Connect Data File
+          </button>
+          <button class="btn btn-sm" id="syncReloadBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span id="syncReloadLabel">Reload from File</span>
+          </button>
+          <button class="btn danger btn-sm" id="syncDisconnectBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.84 12.25l1.72-1.71a5 5 0 0 0-7.07-7.07L9.5 7.5"/><path d="M14.5 16.5l-3 3a5 5 0 0 1-7.07-7.07l1.72-1.72"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+            Disconnect
+          </button>
+        </div>
+        <p class="pane-hint" style="margin-top:12px;">
+          <strong style="color:var(--text-dim);">How it works:</strong> after connecting, every change writes to the file automatically.
+          When you open the same file in another browser, click <em>Reload from File</em> to pull the latest. For GitHub Pages
+          deployments, the file at <code>data/tasks.json</code> is also auto-loaded on every page load (read-only without connecting).
+        </p>
       </div>
     </div>
     <div class="footer">
@@ -1967,9 +2069,9 @@ const App = (() => {
   const PHOTO_KEY   = 'maf_tracker_photo_v1';
   const LOGO_KEY    = 'maf_tracker_logo_v1';
 
-  // Files dropped in /images/ are tried first (relative to this HTML file).
-  const FOLDER_PHOTO_PATHS = ['images/photo.jpg', 'images/photo.jpeg', 'images/photo.png', 'images/photo.webp'];
-  const FOLDER_LOGO_PATHS  = ['images/logo.png', 'images/logo.jpg', 'images/logo.jpeg', 'images/logo.svg', 'images/logo.webp'];
+  // Files dropped in /source/ are tried first (relative to this HTML file).
+  const FOLDER_PHOTO_PATHS = ['source/photo.jpg', 'source/photo.jpeg', 'source/photo.png', 'source/photo.webp'];
+  const FOLDER_LOGO_PATHS  = ['source/logo.png', 'source/logo.jpg', 'source/logo.jpeg', 'source/logo.svg', 'source/logo.webp'];
   // Basic client-side gate; this is not real security.
   const PWD = atob('RmVyZ2FueUAyOTMwNDEw');
 
@@ -2088,13 +2190,340 @@ const App = (() => {
   }
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tasks));
+    syncWriteThrough();
   }
-  function saveConfig() { localStorage.setItem(CONFIG_KEY, JSON.stringify(state.config)); }
-  function saveTips()   { localStorage.setItem(TIPS_KEY, JSON.stringify(state.tips)); }
+  function saveConfig() { localStorage.setItem(CONFIG_KEY, JSON.stringify(state.config)); syncWriteThrough(); }
+  function saveTips()   { localStorage.setItem(TIPS_KEY, JSON.stringify(state.tips)); syncWriteThrough(); }
+
+  /* ---------- Cross-browser Sync (File System Access API + fetch) ---------- */
+  // Source of truth: data/tasks.json living next to this HTML file.
+  // - Read on init: try connected file handle → then fetch('data/tasks.json')
+  // - Write on change: if handle connected, write through silently
+  // Multiple browsers connecting to the same file (synced via OneDrive/GitHub) share data.
+
+  const FS_DB_NAME  = 'maf_tracker_fs_db';
+  const FS_STORE    = 'handles';
+  const FS_KEY      = 'tasks_file';
+  const SYNC_PATH_DEFAULT = 'data/tasks.json';
+  const sync = {
+    handle: null,           // FileSystemFileHandle when connected
+    supported: !!(window.showSaveFilePicker && window.indexedDB),
+    busy: false,
+    pendingWrite: false,
+    initializing: false,    // true while the initial load from file is running
+    lastSavedAt: null,
+    lastFileMtime: null,    // tracks file's last-modified to detect external edits
+    status: 'idle',         // idle | connected | offline | error | syncing | pending
+    debounceTimer: null,
+  };
+
+  function fsOpenDb() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(FS_DB_NAME, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(FS_STORE);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  async function fsStoreHandle(handle) {
+    const db = await fsOpenDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(FS_STORE, 'readwrite');
+      tx.objectStore(FS_STORE).put(handle, FS_KEY);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+  async function fsLoadHandle() {
+    try {
+      const db = await fsOpenDb();
+      return await new Promise((resolve, reject) => {
+        const tx = db.transaction(FS_STORE, 'readonly');
+        const req = tx.objectStore(FS_STORE).get(FS_KEY);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror  = () => reject(req.error);
+      });
+    } catch { return null; }
+  }
+  async function fsClearHandle() {
+    try {
+      const db = await fsOpenDb();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(FS_STORE, 'readwrite');
+        tx.objectStore(FS_STORE).delete(FS_KEY);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    } catch {}
+  }
+  async function fsHasPermission(handle, mode = 'readwrite') {
+    if (!handle?.queryPermission) return true;
+    try { return (await handle.queryPermission({ mode })) === 'granted'; }
+    catch { return false; }
+  }
+  async function fsRequestPermission(handle, mode = 'readwrite') {
+    if (!handle?.requestPermission) return true;
+    try { return (await handle.requestPermission({ mode })) === 'granted'; }
+    catch { return false; }
+  }
+
+  function setSyncStatus(s, hint) {
+    sync.status = s;
+    const el = $('#syncIndicator');
+    if (!el) return;
+    el.dataset.state = s;
+    const lbl = el.querySelector('.sync-label');
+    if (lbl) {
+      const text = ({
+        idle: 'Local Only',
+        connected: 'Synced',
+        syncing: 'Syncing…',
+        offline: 'Local Only',
+        pending: 'Tap to Authorize',
+        error: 'Sync Error'
+      })[s] || s;
+      lbl.textContent = text;
+    }
+    if (hint) el.title = hint;
+    // Refresh the Sync settings pane if it's mounted
+    if (typeof renderSyncPane === 'function' && document.getElementById('syncCardStatus')) renderSyncPane();
+  }
+
+  function snapshotPayload() {
+    return {
+      version: 1,
+      app: 'Mahmoud AlforGany Task Tracker',
+      savedAt: new Date().toISOString(),
+      tasks: state.tasks,
+      config: state.config,
+      tips: state.tips
+    };
+  }
+  function applyPayload(data, opts = { mergeMissing: true }) {
+    if (!data || typeof data !== 'object') return false;
+    if (Array.isArray(data.tasks)) state.tasks = data.tasks;
+    else if (Array.isArray(data)) state.tasks = data; // legacy file: just an array
+    if (data.config && typeof data.config === 'object') {
+      if (Array.isArray(data.config.statusList) && data.config.statusList.length) state.config.statusList = data.config.statusList.map(String);
+      if (Array.isArray(data.config.priorityList) && data.config.priorityList.length) state.config.priorityList = data.config.priorityList.map(String);
+      if (Array.isArray(data.config.departmentList)) state.config.departmentList = data.config.departmentList.map(String);
+    }
+    if (Array.isArray(data.tips)) {
+      state.tips = data.tips.filter(x => x && x.text).map(x => ({ cat: String(x.cat || 'General'), text: String(x.text) }));
+    }
+    // Mirror to LocalStorage so app keeps working if file disappears
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tasks));
+    localStorage.setItem(CONFIG_KEY, JSON.stringify(state.config));
+    localStorage.setItem(TIPS_KEY, JSON.stringify(state.tips));
+    sync.lastSavedAt = data.savedAt || null;
+    return true;
+  }
+
+  async function tryFetchInitialData() {
+    // Works when served via http(s). May also work in Firefox under file://.
+    try {
+      const res = await fetch(SYNC_PATH_DEFAULT, { cache: 'no-cache' });
+      if (!res.ok) return false;
+      const data = await res.json();
+      return applyPayload(data);
+    } catch { return false; }
+  }
+
+  async function syncReadFromHandle({ requestIfNeeded = false } = {}) {
+    if (!sync.handle) return false;
+    try {
+      let granted = await fsHasPermission(sync.handle);
+      if (!granted && requestIfNeeded) granted = await fsRequestPermission(sync.handle);
+      if (!granted) {
+        setSyncStatus('pending', 'Tap the sync indicator to authorize file access.');
+        return false;
+      }
+      const file = await sync.handle.getFile();
+      const text = await file.text();
+      if (!text.trim()) return false;
+      const data = JSON.parse(text);
+      const ok = applyPayload(data);
+      if (ok) sync.lastFileMtime = file.lastModified || null;
+      return ok;
+    } catch (e) {
+      setSyncStatus('error', 'Could not read connected file: ' + (e?.message || e));
+      return false;
+    }
+  }
+
+  async function syncWriteThrough() {
+    // Bail early if nothing to write to or permission is known-missing
+    if (!sync.handle) return;
+    if (sync.initializing) return; // don't overwrite the file while we're still loading from it
+    if (sync.status === 'pending') return; // wait for user authorization
+    clearTimeout(sync.debounceTimer);
+    sync.debounceTimer = setTimeout(doWrite, 350);
+    async function doWrite() {
+      if (sync.busy) { sync.pendingWrite = true; return; }
+      sync.busy = true;
+      setSyncStatus('syncing');
+      try {
+        // queryPermission only — DON'T request here (no user gesture available after debounce)
+        const granted = await fsHasPermission(sync.handle);
+        if (!granted) {
+          setSyncStatus('pending', 'Tap the sync indicator to re-authorize before saving.');
+          return;
+        }
+        const writable = await sync.handle.createWritable();
+        await writable.write(JSON.stringify(snapshotPayload(), null, 2));
+        await writable.close();
+        sync.lastSavedAt = new Date().toISOString();
+        try {
+          const file = await sync.handle.getFile();
+          sync.lastFileMtime = file.lastModified || null;
+        } catch {}
+        setSyncStatus('connected', `Last saved ${new Date(sync.lastSavedAt).toLocaleTimeString()}`);
+      } catch (e) {
+        setSyncStatus('error', e?.message || 'Write failed');
+      } finally {
+        sync.busy = false;
+        if (sync.pendingWrite) { sync.pendingWrite = false; doWrite(); }
+      }
+    }
+  }
+
+  // Called from a user-gesture handler — safe to requestPermission here.
+  async function syncAuthorize() {
+    if (!sync.handle) return false;
+    const granted = await fsRequestPermission(sync.handle);
+    if (!granted) {
+      setSyncStatus('pending', 'Permission denied. Click again to retry.');
+      toast('warn', 'Permission denied', 'File access was not granted.');
+      return false;
+    }
+    const ok = await syncReadFromHandle();
+    if (ok) {
+      refreshAll();
+      setSyncStatus('connected', `Loaded from file (${state.tasks.length} task${state.tasks.length === 1 ? '' : 's'}).`);
+      toast('success', 'Sync authorized', 'Your latest data is loaded.');
+    } else {
+      // file readable but empty — write current state
+      await syncWriteThrough();
+    }
+    return true;
+  }
+
+  // Auto-reload when window regains focus and the file has changed externally.
+  async function syncCheckForExternalChanges() {
+    if (!sync.handle) return;
+    if (!(await fsHasPermission(sync.handle))) return;
+    try {
+      const file = await sync.handle.getFile();
+      const mtime = file.lastModified || 0;
+      if (sync.lastFileMtime && mtime > sync.lastFileMtime + 500) {
+        const ok = await syncReadFromHandle();
+        if (ok) {
+          refreshAll();
+          toast('info', 'Synced from another browser', `${state.tasks.length} task(s) loaded.`);
+        }
+      } else if (!sync.lastFileMtime) {
+        sync.lastFileMtime = mtime;
+      }
+    } catch {}
+  }
+
+  async function syncConnect() {
+    if (!sync.supported) {
+      toast('error', 'Not supported', 'Use Chrome, Edge, or Brave to connect a data file.');
+      return;
+    }
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'tasks.json',
+        types: [{ description: 'Tracker data (JSON)', accept: { 'application/json': ['.json'] } }]
+      });
+      sync.handle = handle;
+      const granted = await fsRequestPermission(handle);
+      if (!granted) { toast('error', 'Permission denied', ''); return; }
+      // If the chosen file already has tasks, ask whether to load them.
+      let existingHasTasks = false;
+      try {
+        const file = await handle.getFile();
+        const text = await file.text();
+        if (text.trim()) {
+          const data = JSON.parse(text);
+          existingHasTasks = (Array.isArray(data?.tasks) && data.tasks.length > 0) || (Array.isArray(data) && data.length > 0);
+          if (existingHasTasks) {
+            confirmAction('The selected file already has tasks. Replace your current data with the file\'s content?', async () => {
+              applyPayload(data);
+              await fsStoreHandle(handle);
+              await syncWriteThrough(); // touch updates savedAt
+              setSyncStatus('connected', 'File connected — data loaded.');
+              refreshAll();
+              toast('success', 'Connected & loaded', `${state.tasks.length} task(s) from file.`);
+            }, 'Load file content?');
+            return;
+          }
+        }
+      } catch {}
+      // File empty or new — write current state to it
+      await fsStoreHandle(handle);
+      await syncWriteThrough();
+      setSyncStatus('connected', 'File connected.');
+      toast('success', 'Connected', 'Tasks now sync to this file. Open the same file in another browser to share data.');
+    } catch (e) {
+      // user cancelled — silent
+    }
+    renderSettingsPanes && renderSettingsPanes();
+  }
+
+  async function syncDisconnect() {
+    sync.handle = null;
+    await fsClearHandle();
+    setSyncStatus('idle', 'Sync turned off — data stays in this browser.');
+    toast('info', 'Disconnected', 'Sync turned off. Data still saved locally.');
+    renderSettingsPanes && renderSettingsPanes();
+  }
+
+  async function syncForceReload() {
+    if (!sync.handle) {
+      const ok = await tryFetchInitialData();
+      if (ok) { refreshAll(); toast('success', 'Reloaded', 'Data refreshed from data/tasks.json'); }
+      else toast('warn', 'Nothing to reload', 'Connect a data file or place data/tasks.json next to this HTML.');
+      return;
+    }
+    const ok = await syncReadFromHandle();
+    if (ok) { refreshAll(); toast('success', 'Reloaded', 'Data refreshed from connected file.'); }
+    else toast('warn', 'Reload failed', 'Could not read the connected file.');
+  }
+
+  async function syncInit() {
+    // 1. Try to restore connected handle
+    if (sync.supported) {
+      try {
+        const handle = await fsLoadHandle();
+        if (handle) {
+          sync.handle = handle;
+          if (await fsHasPermission(handle)) {
+            await syncReadFromHandle();
+            setSyncStatus('connected', `File connected — auto-syncing on every change. (${state.tasks.length} task${state.tasks.length === 1 ? '' : 's'} loaded.)`);
+            return 'handle';
+          } else {
+            // Permission needs user gesture — show explicit pending state
+            setSyncStatus('pending', 'File connected but needs authorization. Click the sync indicator to grant access and load your tasks.');
+            return 'handle-pending';
+          }
+        }
+      } catch {}
+    }
+    // 2. Try fetching data/tasks.json (works on http(s) / GitHub Pages)
+    const ok = await tryFetchInitialData();
+    if (ok) { setSyncStatus('idle', `Loaded data/tasks.json (${state.tasks.length} task${state.tasks.length === 1 ? '' : 's'}, read-only — connect file for write-back).`); return 'fetch'; }
+    setSyncStatus('idle', 'Local-only mode. Open Settings → Sync to connect a shared data file.');
+    return 'local';
+  }
   function saveTheme()  { localStorage.setItem(THEME_KEY, state.theme); }
 
   function seedIfEmpty() {
     if (state.tasks.length > 0) return;
+    // Don't seed when connected to (or pending) a real data file — risk of overwriting real data.
+    if (sync.handle) return;
+    if (sync.status === 'pending' || sync.status === 'connected') return;
     const t = todayISO();
     const offset = (n) => {
       const d = new Date(); d.setDate(d.getDate() + n);
@@ -2379,12 +2808,18 @@ const App = (() => {
     }).length;
     const completed = tasks.filter(t => t.status === 'Completed').length;
     const overdue = tasks.filter(t => effectiveStatus(t) === 'Overdue').length;
-    const high = tasks.filter(t => t.priority === 'High' && t.status !== 'Completed').length;
+    // Dynamic top priority — uses the FIRST priority from your configured list
+    const topPriority = state.config.priorityList[0] || 'High';
+    const high = tasks.filter(t => t.priority === topPriority && t.status !== 'Completed').length;
     $('#kpi-total').textContent = total;
     $('#kpi-open').textContent = open;
     $('#kpi-completed').textContent = completed;
     $('#kpi-overdue').textContent = overdue;
     $('#kpi-high').textContent = high;
+    const lblEl = $('#kpi-high-label');
+    if (lblEl) lblEl.textContent = topPriority + ' Priority';
+    const subEl = $('#kpi-high-sub');
+    if (subEl) subEl.textContent = 'Open ' + topPriority.toLowerCase() + ' tasks';
   }
 
   function renderDashboardPanels() {
@@ -2856,7 +3291,7 @@ const App = (() => {
     const folderPhoto = await tryFolderImage(FOLDER_PHOTO_PATHS);
     if (folderPhoto) {
       renderImage('brandPhoto', folderPhoto, 'Mahmoud AlforGany');
-      $('#brandPhoto').title = 'Drop a new photo into /images/ to change';
+      $('#brandPhoto').title = 'Drop a new photo into /source/ to change';
     } else {
       try {
         const stored = localStorage.getItem(PHOTO_KEY);
@@ -2871,7 +3306,7 @@ const App = (() => {
     const folderLogo = await tryFolderImage(FOLDER_LOGO_PATHS);
     if (folderLogo) {
       renderImage('brandLogo', folderLogo, 'Logo');
-      $('#brandLogo').title = 'Drop a new logo into /images/ to change';
+      $('#brandLogo').title = 'Drop a new logo into /source/ to change';
     } else {
       try {
         const stored = localStorage.getItem(LOGO_KEY);
@@ -2932,7 +3367,7 @@ const App = (() => {
     handleImageFile(file, LOGO_KEY, 'brandLogo', 'Logo', 'Click to change logo');
   }
   function removePhoto() {
-    confirmAction('Remove your profile photo? (Files in /images/ are not deleted.)', () => {
+    confirmAction('Remove your profile photo? (Files in /source/ are not deleted.)', () => {
       localStorage.removeItem(PHOTO_KEY);
       clearImage('brandPhoto', 'Click to upload your photo');
       // re-check folder in case a file is still there
@@ -2941,7 +3376,7 @@ const App = (() => {
     }, 'Remove photo');
   }
   function removeLogo() {
-    confirmAction('Remove the company logo? (Files in /images/ are not deleted.)', () => {
+    confirmAction('Remove the company logo? (Files in /source/ are not deleted.)', () => {
       localStorage.removeItem(LOGO_KEY);
       clearImage('brandLogo', 'Click to upload company logo');
       loadBrandImages();
@@ -3000,6 +3435,11 @@ const App = (() => {
       showModal('settingsModal');
     });
   }
+  function openSettingsToPane(pane) {
+    renderSettingsPanes();
+    switchSettingsTab(pane);
+    showModal('settingsModal');
+  }
   function switchSettingsTab(name) {
     $$('.settings-tab').forEach(t => t.classList.toggle('active', t.dataset.pane === name));
     $$('.settings-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === name));
@@ -3018,6 +3458,38 @@ const App = (() => {
       saveConfig(); refreshAll();
     });
     renderTipsEditor();
+    renderSyncPane();
+  }
+
+  function renderSyncPane() {
+    const stEl = $('#syncCardStatus');
+    const fEl  = $('#syncCardFile');
+    const lEl  = $('#syncCardLast');
+    const sEl  = $('#syncCardSupport');
+    const supportText = sync.supported ? 'File System Access — supported' : 'Not supported (use Chrome / Edge / Brave)';
+    if (sEl) sEl.textContent = supportText;
+    const stateText = ({
+      idle: 'Local only',
+      connected: 'Connected · auto-syncing',
+      syncing: 'Syncing…',
+      error: 'Error',
+      pending: 'Awaiting authorization',
+      offline: 'Local only'
+    })[sync.status] || sync.status;
+    if (stEl) stEl.textContent = stateText;
+    if (fEl) fEl.textContent = sync.handle ? (sync.handle.name || 'tasks.json') : 'Not connected';
+    if (lEl) {
+      if (sync.lastSavedAt) lEl.textContent = new Date(sync.lastSavedAt).toLocaleString();
+      else if (sync.lastFileMtime) lEl.textContent = new Date(sync.lastFileMtime).toLocaleString() + ' (read)';
+      else lEl.textContent = '—';
+    }
+    const connectBtn = $('#syncConnectBtn');
+    const reloadBtn = $('#syncReloadBtn');
+    const disconnectBtn = $('#syncDisconnectBtn');
+    if (connectBtn) connectBtn.disabled = !sync.supported;
+    const reloadLabel = $('#syncReloadLabel');
+    if (reloadLabel) reloadLabel.textContent = sync.status === 'pending' ? 'Authorize & Load' : 'Reload from File';
+    if (disconnectBtn) disconnectBtn.style.display = sync.handle ? '' : 'none';
   }
   function renderListEditor(containerId, list, onChange) {
     const container = $('#' + containerId);
@@ -3311,6 +3783,41 @@ const App = (() => {
     });
     $('#settingsResetBtn').addEventListener('click', resetSettings);
 
+    // sync controls — indicator click is context-aware
+    $('#syncIndicator').addEventListener('click', async () => {
+      // Pending permission state — request access right here in the user-gesture context
+      if (sync.status === 'pending' && sync.handle) {
+        const ok = await syncAuthorize();
+        if (!ok) return;
+        return;
+      }
+      // Otherwise open Settings → Sync (gated by editor password)
+      requireAuth(() => openSettingsToPane('sync'));
+    });
+    $('#syncConnectBtn').addEventListener('click', () => requireAuth(syncConnect));
+    $('#syncReloadBtn').addEventListener('click', () => requireAuth(async () => {
+      if (sync.status === 'pending' && sync.handle) {
+        await syncAuthorize();
+      } else {
+        await syncForceReload();
+      }
+    }));
+    $('#syncDisconnectBtn').addEventListener('click', () => requireAuth(() => {
+      confirmAction('Disconnect from the data file? Tasks will keep saving locally only.', syncDisconnect, 'Disconnect Sync');
+    }));
+
+    // Auto-reload when the page regains focus (e.g., after editing in another browser)
+    let focusBusy = false;
+    const onFocusOrVisible = async () => {
+      if (focusBusy) return;
+      focusBusy = true;
+      try { await syncCheckForExternalChanges(); } finally { focusBusy = false; }
+    };
+    window.addEventListener('focus', onFocusOrVisible);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') onFocusOrVisible();
+    });
+
     // shadow on header when scrolled
     const onScroll = () => {
       const h = $('.header');
@@ -3335,19 +3842,24 @@ const App = (() => {
   }
 
   /* ---------- Init ---------- */
-  function init() {
+  async function init() {
     load();
     applyTheme();
-    seedIfEmpty();
     bind();
     loadBrandImages();
     renderAuthIndicator();
     setView('dashboard');
+    // Block saves from firing until sync init is done (prevents races where a
+    // user-triggered save would write LocalStorage data over the real file).
+    sync.initializing = true;
+    setSyncStatus('syncing', 'Connecting to data file…');
+    try { await syncInit(); } finally { sync.initializing = false; }
+    seedIfEmpty();
     refreshAll();
     startTipRotation();
   }
 
-  return { init, openAuthOrTask, editTask, deleteTask, openSettings };
+  return { init, openAuthOrTask, editTask, deleteTask, openSettings, openSettingsToPane };
 })();
 
 document.addEventListener('DOMContentLoaded', App.init);
